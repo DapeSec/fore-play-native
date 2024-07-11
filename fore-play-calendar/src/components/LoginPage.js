@@ -14,7 +14,7 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-panel">
-        <h2>Login</h2>
+        <h2>Fore Play</h2>
         <form onSubmit={handleLogin}>
           <div className="input-group">
             <label>Email</label>

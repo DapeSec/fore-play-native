@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarPage.css'; // Import the custom CSS file
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const CalendarPage = () => {
   const [date, setDate] = useState(new Date());
@@ -42,7 +43,7 @@ const CalendarPage = () => {
             tileContent={({ date }) => renderAvailability(date)}
             onClickDay={(value) => toggleAvailability(value)}
             className="custom-calendar"
-            locale="en-US" // Add this line to set the calendar locale to US (starts week on Sunday)
+            locale="en-US" // Set the calendar locale to US (starts week on Sunday)
           />
         </div>
       </div>
@@ -51,9 +52,10 @@ const CalendarPage = () => {
 };
 
 const Navbar = () => {
+  const navigate = useNavigate(); // Use useNavigate for navigation
   const handleLogout = () => {
     // Implement your logout logic here
-    window.location.href = '/login';
+    navigate('/login'); // Navigate to the login page
   };
 
   return (
