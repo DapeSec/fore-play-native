@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'); /* Add this line */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  background: url('/public/golf-course.jpg') no-repeat center center fixed; /* Correct path */
+  background-size: cover; /* Cover the entire background */
+  height: 100vh;
+  overflow: hidden; /* Hide any overflow */
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Darker overlay with more opacity */
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1; /* Place it behind the content */
+}
+
+.navbar {
+  width: 100%;
+  background-color: rgba(34, 139, 34, 0.9); /* Semi-transparent natural green */
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  display: flex;
+}
+
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center; /* Ensure vertical alignment */
+}
+
+.navbar-button {
+  font-size: inherit; /* Match the font size of other links */
+  padding: 0; /* Remove any padding */
+}
+
+.navbar-link:hover {
+  color: #ddd;
+}
+
+.calendar-container {
+  max-width: 1200px;
+  margin: 100px auto; /* Adjusted margin to account for navbar */
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background for the container */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative; /* Position relative for the overlay */
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: center; /* Center the title */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: 'Open Sans', sans-serif;
+  color: #228B22; /* Natural green color */
+  font-weight: 700;
+  font-size: 2.5rem; /* Larger font size */
+  position: relative;
+  animation: popEffect 1s ease-in-out;
+}
+
+@keyframes popEffect {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.calendar-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.custom-calendar {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.custom-calendar .react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  background-color: #228B22; /* Natural green color */
+  color: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-calendar .react-calendar__navigation button,
+.custom-calendar .react-calendar__navigation__label {
+  color: #fff;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s; /* Smooth scaling effect on hover */
+}
+
+.custom-calendar .react-calendar__navigation button:focus,
+.custom-calendar .react-calendar__navigation__label:focus {
+  outline: none; /* Remove the default focus outline */
+}
+
+.custom-calendar .react-calendar__navigation button:hover,
+.custom-calendar .react-calendar__navigation__label:hover {
+  transform: scale(1.1); /* Slight scaling effect */
+  background-color: inherit; /* Ensure the background color remains the same */
+}
+
+.custom-calendar .react-calendar__navigation__label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-calendar .react-calendar__navigation__label:focus {
+  box-shadow: none; /* Remove focus shadow */
+}
+
+.custom-calendar .react-calendar__tile--active {
+  background: #006400; /* Darker natural green */
+  color: #fff;
+}
+
+.custom-calendar .react-calendar__tile--now {
+  background: #e6ffe6; /* Light golf theme color */
+}
+
+.custom-calendar .react-calendar__tile {
+  text-align: center;
+  padding: 10px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 16px; /* Slightly larger font size */
+  font-family: 'Poppins', sans-serif; /* Stylish font */
+  font-weight: 700; /* Bolder font */
+  border: 1px solid #ddd;
+  margin: 0; /* Removed margin to make tiles flush */
+  transition: background 0.3s, box-shadow 0.3s; /* Smooth hover effect */
+}
+
+.custom-calendar .react-calendar__month-view__days__day {
+  position: relative;
+}
+
+.custom-calendar .react-calendar__tile:hover {
+  background: #98fb98; /* Hover color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow on hover */
+}
+
+.custom-calendar .react-calendar__tile:focus {
+  outline: none; /* Remove focus outline from calendar tiles */
+  box-shadow: none; /* Remove focus shadow */
+}
+
+.availability {
+  margin-top: 5px;
+}
+
+.availability.available {
+  color: #228B22; /* Natural green color */
+  font-weight: bold;
+}
+
+.availability.busy {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+/* Fix for missing Sunday box */
+.custom-calendar .react-calendar__month-view__days__day--weekend {
+  display: inline-flex;
+  color: #228B22; /* Change weekend font color to green */
+}
