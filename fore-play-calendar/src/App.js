@@ -1,20 +1,26 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import CalendarPage from './components/CalendarPage';
-import ProfilePage from './components/ProfilePage';
+import PrivateRoute from './components/PrivateRoute';
 
-function App() {
+const App = () => {
   return (
-    <div>
+    <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/calendar"
+          element={
+            <PrivateRoute>
+              <CalendarPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
-    </div>
+    </Router>
   );
-}
+};
 
 export default App;
