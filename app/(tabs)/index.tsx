@@ -1,8 +1,11 @@
-import { Button, Image, StyleSheet, Platform } from 'react-native';
-import * as React from 'react';
+import { Button, Image, StyleSheet, View, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest, useAutoDiscovery } from 'expo-auth-session';
+
+import { Calendar, DateObject } from 'react-native-calendars';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -26,6 +29,13 @@ export default function HomeScreen() {
     },
     discovery
   );
+  // Calendar
+  const [selectedDate, setSelectedDate] = useState<DateObject>({});
+  const handleDateChange = (event, date) => {
+     if (date) {
+       setSelectedDate({ [date.toISOString().split('T')[0]]: { selected: true } });
+     }
+   };
 
   React.useEffect(() => {
     if (response?.type === 'success') {
@@ -56,7 +66,17 @@ export default function HomeScreen() {
         />
       </ThemedView>
       <ThemedView style={styles.calendarContainer}>
-        <ThemedText type="subtitle">Tee Times</ThemedText>
+        <Calendar
+          current={new Date()}
+          markedDates={selectedDate}
+          onDayPress={(day) => setSelectedDate({ [day.dateString]: { selected: true } })}
+        />
+        <DateTimePicker
+            value={new Date()}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
       </ThemedView>
     </ParallaxScrollView>
   );
