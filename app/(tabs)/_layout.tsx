@@ -15,29 +15,29 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="login"
-        options={{
-          title: 'Login',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Tee Times',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="golf"
+        name="event"
         options={{
-          title: 'Golf',
+          title: 'Add Date',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'add' : 'add-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="availability"
+        options={{
+          title: 'My Availability',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
         }}
       />

@@ -1,11 +1,39 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Button, Image, StyleSheet, Platform } from 'react-native';
+import * as React from 'react';
 
-import { HelloWave } from '@/components/HelloWave';
+import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri, useAuthRequest, useAutoDiscovery } from 'expo-auth-session';
+
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+
+WebBrowser.maybeCompleteAuthSession();
+
+
 export default function HomeScreen() {
+  // Endpoint
+  const discovery = useAutoDiscovery('https://dev-21624059.okta.com/oauth2/default');
+  // Request
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: '0oai9j6z6wJowU9QQ5d7',
+      scopes: ['openid', 'profile'],
+      redirectUri: makeRedirectUri({
+        native: 'http://localhost:8081/',
+      }),
+    },
+    discovery
+  );
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { code } = response.params;
+    }
+  }, [response]);
+
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -16,35 +44,19 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Fore Play</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
+      <ThemedView style={styles.loginContainer}>
+        <Button
+          disabled={!request}
+          title="Login"
+          onPress={() => {
+            promptAsync();
+          }}
+        />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+      <ThemedView style={styles.calendarContainer}>
+        <ThemedText type="subtitle">Tee Times</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -56,7 +68,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  stepContainer: {
+  loginContainer: {
+    gap: 8,
+    marginBottom: 8,
+  },
+  calendarContainer: {
     gap: 8,
     marginBottom: 8,
   },
