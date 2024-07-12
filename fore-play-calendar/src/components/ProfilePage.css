@@ -39,15 +39,13 @@
     border-radius: 4px;
   }
   
-  .profile-picture {
+  .profile-preview {
     width: 100%;
     height: auto;
     margin-top: 10px;
   }
   
-  .update-button,
-  .return-button,
-  .cancel-button {
+  .update-button {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -56,31 +54,44 @@
     cursor: pointer;
     font-size: 16px;
     margin-top: 10px;
-    display: inline-block;
-  }
-  
-  .cancel-button {
-    background-color: #e74c3c;
   }
   
   .return-button {
     background-color: #f0ad4e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  /* Centering the Update Password Button */
+  .centered-button {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .centered-button button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .cancel-button {
+    background-color: #d9534f;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-right: 10px;
   }
   
   .password-buttons {
     display: flex;
-    justify-content: space-between;
-  }
-  
-  .message {
-    margin-top: 10px;
-  }
-  
-  .message.success {
-    color: green;
-  }
-  
-  .message.error {
-    color: red;
+    justify-content: space-around;
   }
   

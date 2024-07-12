@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import './Navbar.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,59 +9,23 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     localStorage.removeItem('profilePicture');
     navigate('/login');
   };
 
-  const navbarStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#4CAF50',
-    padding: '10px 20px',
-    flexWrap: 'wrap' // Ensure items wrap to new lines if needed
-  };
-
-  const navbarBrandStyle = {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: 'white',
-    marginRight: 'auto' // Ensure it stays on the left
-  };
-
-  const navbarMenuStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px',
-    flexWrap: 'wrap' // Allow menu items to wrap
-  };
-
-  const linkButtonStyle = {
-    color: 'white',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    fontSize: '16px'
-  };
-
-  const profilePictureStyle = {
-    borderRadius: '50%',
-    width: '40px',
-    height: '40px'
-  };
-
   return (
-    <nav style={navbarStyle}>
-      <div style={navbarBrandStyle}>
-        <Link to="/calendar" style={{ color: 'white', textDecoration: 'none' }}>Fore Play</Link>
+    <nav className="navbar">
+      <div className="navbar-brand">
+        <Link to="/calendar">Fore Play</Link>
       </div>
-      <div style={navbarMenuStyle}>
+      <div className="navbar-menu">
         {token && (
           <>
-            <Link to="/profile" style={linkButtonStyle}>Profile</Link>
-            <button onClick={handleLogout} style={linkButtonStyle}>Logout</button>
+            <Link to="/profile">Profile</Link>
+            <button onClick={handleLogout}>Logout</button>
             {profilePicture && (
-              <img src={`http://localhost:5000/${profilePicture}`} alt="Profile" style={profilePictureStyle} />
+              <img src={`http://localhost:5000/${profilePicture}`} alt="Profile" className="profile-picture" />
             )}
           </>
         )}
