@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './CalendarPage.css'; // Import the custom CSS file
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import './CalendarPage.css';
+import Navbar from './Navbar';
+import axios from 'axios';
 
 const CalendarPage = () => {
   const [date, setDate] = useState(new Date());
   const [availability, setAvailability] = useState({});
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/profile/${userId}`);
+        setProfilePicture(response.data.profilePicture);
+      } catch (error) {
+        console.log('Failed to fetch profile:', error);
+      }
+    };
+
+    if (userId) {
+      fetchProfile();
+    }
+  }, []);
 
   const onDateChange = (selectedDate) => {
     setDate(selectedDate);
@@ -30,7 +48,7 @@ const CalendarPage = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar profilePicture={profilePicture} />
       <div className="overlay"></div>
       <div className="calendar-container">
         <div className="calendar-header">
@@ -43,31 +61,11 @@ const CalendarPage = () => {
             tileContent={({ date }) => renderAvailability(date)}
             onClickDay={(value) => toggleAvailability(value)}
             className="custom-calendar"
-            locale="en-US" // Set the calendar locale to US (starts week on Sunday)
+            locale="en-US"
           />
         </div>
       </div>
     </>
-  );
-};
-
-const Navbar = () => {
-  const navigate = useNavigate(); // Use useNavigate for navigation
-  const handleLogout = () => {
-    // Implement your logout logic here
-    navigate('/login'); // Navigate to the login page
-  };
-
-  return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <a href="/" className="navbar-logo">Fore Play</a>
-        <ul className="navbar-menu">
-          <li className="navbar-item"><a href="/profile" className="navbar-link">Profile</a></li>
-          <li className="navbar-item"><button className="navbar-link navbar-button" onClick={handleLogout}>Logout</button></li>
-        </ul>
-      </div>
-    </nav>
   );
 };
 
