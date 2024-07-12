@@ -22,6 +22,7 @@ const LoginPage = () => {
       setMessage(response?.data?.message || 'Success');
       if (response?.data?.token) {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId);
         navigate('/calendar'); // Redirect to calendar page after login
       }
     } catch (error) {
