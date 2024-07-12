@@ -51,7 +51,7 @@ const ProfilePage = () => {
 
   const handlePasswordUpdate = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/reset-password', { userId, newPassword });
+      await axios.post('http://localhost:5000/reset-password', { userId, newPassword });
       setMessage('Password updated successfully.');
     } catch (error) {
       setMessage('An error occurred while updating your password.');
@@ -93,6 +93,7 @@ const ProfilePage = () => {
         <p>{message}</p>
         <button className="return-button" onClick={() => window.location.href = '/calendar'}>Return to Calendar</button>
       </div>
+      <input type="file" id="file-input" style={{ display: 'none' }} onChange={handlePictureChange} />
     </div>
   );
 };
