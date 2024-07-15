@@ -35,7 +35,13 @@ const userSchema = new mongoose.Schema({
   profilePicture: { type: String }
 });
 
+const availabilitySchema = new mongoose.Schema({
+  date: { type: String, required: true },
+  users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+});
+
 const User = mongoose.model('User', userSchema);
+const Availability = mongoose.model('Availability', availabilitySchema);
 
 const generateToken = (user) => {
   return jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -60,7 +66,7 @@ app.post('/register', async (req, res) => {
     const user = new User({ username, email, password: hashedPassword });
     await user.save();
     const token = generateToken(user);
-    res.status(201).json({ message: 'User registered successfully', token });
+    res.status(201).json({ message: 'User registered successfully', token, userId: user._id });
   } catch (error) {
     console.log('Registration error:', error);
     res.status(400).json({ error: 'User registration failed' });
@@ -158,6 +164,46 @@ app.get('/profile/:userId', async (req, res) => {
   }
 });
 
+app.post('/select-date', async (req, res) => {
+  const { userId, date, availability } = req.body;
+
+  try {
+    let dateEntry = await Availability.findOne({ date });
+
+    if (!dateEntry) {
+      dateEntry = new Availability({ date, users: [] });
+    }
+
+    if (availability.length === 0) {
+      dateEntry.users = dateEntry.users.filter(user => user.toString() !== userId);
+    } else {
+      if (!dateEntry.users.some(user => user.toString() === userId)) {
+        dateEntry.users.push(userId);
+      }
+    }
+
+    await dateEntry.save();
+
+    res.json({ message: 'Date selection updated successfully' });
+  } catch (error) {
+    console.log('Date selection update error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/get-availability', async (req, res) => {
+  try {
+    const availability = await Availability.find().populate('users', 'profilePicture');
+    const formattedAvailability = availability.map(dateEntry => ({
+      date: dateEntry.date,
+      users: dateEntry.users.map(user => ({ _id: user._id, profilePicture: user.profilePicture }))
+    }));
+    res.json(formattedAvailability);
+  } catch (error) {
+    console.log('Availability fetch error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

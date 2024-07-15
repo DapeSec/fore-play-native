@@ -218,24 +218,11 @@ body {
   box-shadow: none; /* Remove focus shadow */
 }
 
-.availability {
-  margin-top: 5px;
-}
-
-.availability.available {
-  color: #228B22; /* Natural green color */
-  font-weight: bold;
-}
-
-.availability.busy {
-  color: #ff0000;
-  font-weight: bold;
-}
-
-/* Fix for missing Sunday box */
-.custom-calendar .react-calendar__month-view__days__day--weekend {
-  display: inline-flex;
-  color: #228B22; /* Change weekend font color to green */
+/* Highlight tile with bright green and shadow when four users select it */
+.custom-calendar .react-calendar__tile--highlighted {
+  background: #32cd32; /* Bright green */
+  box-shadow: 0 0 10px rgba(50, 205, 50, 0.7); /* Shadow effect */
+  color: #fff; /* White text for contrast */
 }
 
 /* Splash animation */
@@ -315,8 +302,6 @@ body {
   font-weight: bold;
   z-index: 1;
 }
-
-
 
 /* Responsive styles */
 @media (max-width: 768px) {

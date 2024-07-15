@@ -22,9 +22,23 @@ const CalendarPage = () => {
       }
     };
 
+    const fetchAvailability = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/get-availability');
+        const availabilityData = response.data.reduce((acc, item) => {
+          acc[item.date] = item.users.length === 4 ? 'available' : item.users;
+          return acc;
+        }, {});
+        setAvailability(availabilityData);
+      } catch (error) {
+        console.log('Failed to fetch availability:', error);
+      }
+    };
+
     if (userId) {
       fetchProfile();
     }
+    fetchAvailability();
   }, []);
 
   const onDateChange = (selectedDate) => {
@@ -35,20 +49,25 @@ const CalendarPage = () => {
     setActiveStartDate(activeStartDate);
   };
 
-  const handleDayClick = (value) => {
+  const handleDayClick = async (value) => {
     const userId = localStorage.getItem('userId');
     const dateKey = value.toDateString();
     const updatedAvailability = { ...availability };
+
+    // If the date is marked as "Book Me!", do nothing
+    if (updatedAvailability[dateKey] === 'available') {
+      return;
+    }
 
     if (!updatedAvailability[dateKey]) {
       updatedAvailability[dateKey] = [];
     }
 
-    if (updatedAvailability[dateKey].includes(userId)) {
-      updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(id => id !== userId);
+    if (updatedAvailability[dateKey].some(user => user._id === userId)) {
+      updatedAvailability[dateKey] = updatedAvailability[dateKey].filter(user => user._id !== userId);
     } else {
       if (updatedAvailability[dateKey].length < 4) {
-        updatedAvailability[dateKey].push(userId);
+        updatedAvailability[dateKey].push({ _id: userId, profilePicture });
         // Add splash animation
         const dayElement = document.querySelector(`[aria-label="${dateKey}"]`);
         if (dayElement) {
@@ -67,11 +86,22 @@ const CalendarPage = () => {
     }
 
     setAvailability(updatedAvailability);
+
+    // Save the updated availability to the server
+    try {
+      await axios.post('http://localhost:5000/select-date', { userId, date: dateKey, availability: updatedAvailability[dateKey] });
+    } catch (error) {
+      console.log('Failed to update date selection:', error);
+    }
   };
 
   const renderAvailability = (date) => {
     const dateKey = date.toDateString();
     const users = availability[dateKey];
+
+    if (users === 'available') {
+      return <div className="availability green">Book Me!</div>;
+    }
 
     return (
       <>
@@ -80,8 +110,8 @@ const CalendarPage = () => {
         </div>
         {users && users !== 'available' && users.map((user, index) => (
           <img
-            key={user}
-            src={`http://localhost:5000/${profilePicture}`}
+            key={user._id}
+            src={`http://localhost:5000/${user.profilePicture}`}
             alt="Profile"
             className={`profile-picture corner-${index + 1}`}
           />
@@ -115,6 +145,13 @@ const CalendarPage = () => {
             onActiveStartDateChange={onActiveStartDateChange}
             className="custom-calendar"
             locale="en-US"
+            tileClassName={({ date, view }) => {
+              const dateKey = date.toDateString();
+              if (view === 'month' && availability[dateKey] === 'available') {
+                return 'react-calendar__tile--highlighted';
+              }
+              return null;
+            }}
           />
         </div>
       </div>
