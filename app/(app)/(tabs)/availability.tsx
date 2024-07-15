@@ -1,10 +1,30 @@
-import { Button, Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { FlashList } from "@shopify/flash-list"
 
 export default function HomeScreen() {
+  const DATA = [
+    {
+      title: "First Item",
+    },
+    {
+      title: "Second Item",
+    },
+  ];
+  
+  const MyList = () => {
+    return (
+      <FlashList
+        data={DATA}
+        renderItem={({ item }) => <ThemedText>{item.title}</ThemedText>}
+        estimatedItemSize={10}
+      />
+    );
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -15,10 +35,10 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Add Date to Calendar</ThemedText>
+        <ThemedText type="title">Confirm Your Availability</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.loginContainer}>
-        <ThemedText>Please login first...</ThemedText>
+      <ThemedView style={styles.availabilityContainer}>
+        <ThemedText>TODO</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -30,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  loginContainer: {
+  availabilityContainer: {
     gap: 8,
     marginBottom: 8,
   },

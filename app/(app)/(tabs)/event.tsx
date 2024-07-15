@@ -1,10 +1,11 @@
-import { Button, Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function HomeScreen() {
+export default function EventScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -15,10 +16,10 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Confirm Your Availability</ThemedText>
+        <ThemedText type="title">Add Date to Calendar</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.loginContainer}>
-        <ThemedText>Please login first...</ThemedText>
+      <ThemedView style={styles.eventContainer}>
+        <ThemedText>TODO</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  loginContainer: {
+  eventContainer: {
     gap: 8,
     marginBottom: 8,
   },
