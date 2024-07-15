@@ -1,6 +1,8 @@
+/* Importing Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'); /* Add this line */
 
+/* General Styling */
 body {
   margin: 0;
   padding: 0;
@@ -21,6 +23,7 @@ body {
   z-index: -1; /* Place it behind the content */
 }
 
+/* Navbar Styling */
 .navbar {
   width: 100%;
   background-color: rgba(34, 139, 34, 0.9); /* Semi-transparent natural green */
@@ -81,6 +84,7 @@ body {
   color: #ddd;
 }
 
+/* Calendar Container Styling */
 .calendar-container {
   max-width: 1200px;
   margin: 100px auto; /* Adjusted margin to account for navbar */
@@ -232,4 +236,99 @@ body {
 .custom-calendar .react-calendar__month-view__days__day--weekend {
   display: inline-flex;
   color: #228B22; /* Change weekend font color to green */
+}
+
+/* Splash animation */
+@keyframes splash {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.splash {
+  animation: splash 0.6s ease-out;
+}
+
+/* Profile picture positioning */
+.profile-picture {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.corner-1 {
+  top: 5px;
+  left: 5px;
+}
+
+.corner-2 {
+  top: 5px;
+  right: 5px;
+}
+
+.corner-3 {
+  bottom: 5px;
+  left: 5px;
+}
+
+.corner-4 {
+  bottom: 5px;
+  right: 5px;
+}
+
+/* Date number styling */
+.react-calendar__tile .date-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.react-calendar__tile-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-calendar__tile-content .date-number.with-pictures {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .profile-picture {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-picture {
+    width: 10px;
+    height: 10px;
+  }
 }
