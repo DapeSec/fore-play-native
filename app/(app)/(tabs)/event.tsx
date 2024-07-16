@@ -1,4 +1,6 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Alert, Button, Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -6,6 +8,41 @@ import { ThemedView } from '@/components/ThemedView';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function EventScreen() {
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(true);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    //setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    //setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const createProposalAlert = () =>
+    Alert.alert('Submit Proposal', 'Create proposal for selected date?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => createSubmitConfirmationAlert()},
+
+    ]);
+
+  const createSubmitConfirmationAlert = () =>
+    Alert.alert('Proposal Submitted', 'Please confirm your availability.', [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -16,10 +53,25 @@ export default function EventScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Add Date to Calendar</ThemedText>
+        <ThemedText type="subtitle">Propose Tee Time</ThemedText>
       </ThemedView>
       <ThemedView style={styles.eventContainer}>
-        <ThemedText>TODO</ThemedText>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            //mode={mode}
+            display="spinner"
+            onChange={onChange}
+          />
+        )}
+        <Button
+          title="Submit"
+          onPress={() => {
+            createProposalAlert();
+            
+          }}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -32,6 +84,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   eventContainer: {
+    alignItems: 'center',
     gap: 8,
     marginBottom: 8,
   },

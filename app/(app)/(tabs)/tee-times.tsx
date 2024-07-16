@@ -10,11 +10,6 @@ import { ThemedView } from '@/components/ThemedView';
 export default function TeeTimesScreen() {
   // Calendar
   const [selectedDate, setSelectedDate] = useState<DateObject>({});
-  const handleDateChange = (event, date) => {
-     if (date) {
-       setSelectedDate({ [date.toISOString().split('T')[0]]: { selected: true } });
-     }
-   };
 
   return (
     <ParallaxScrollView
@@ -31,12 +26,6 @@ export default function TeeTimesScreen() {
           markedDates={selectedDate}
           onDayPress={(day) => setSelectedDate({ [day.dateString]: { selected: true } })}
         />
-        <DateTimePicker
-            value={new Date()}
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-          />
       </ThemedView>
     </ParallaxScrollView>
   );
