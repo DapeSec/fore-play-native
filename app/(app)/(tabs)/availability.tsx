@@ -5,25 +5,15 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { FlashList } from "@shopify/flash-list"
 
-export default function HomeScreen() {
+export default function AvailabilityScreen() {
   const DATA = [
     {
-      title: "First Item",
+      title: "Proposal: 8/4/24",
     },
     {
-      title: "Second Item",
+      title: "Proposal: 8/11/24",
     },
   ];
-  
-  const MyList = () => {
-    return (
-      <FlashList
-        data={DATA}
-        renderItem={({ item }) => <ThemedText>{item.title}</ThemedText>}
-        estimatedItemSize={10}
-      />
-    );
-  };
 
   return (
     <ParallaxScrollView
@@ -35,10 +25,14 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Confirm Your Availability</ThemedText>
+        <ThemedText type="subtitle">Confirm Your Availability</ThemedText>
       </ThemedView>
       <ThemedView style={styles.availabilityContainer}>
-        <ThemedText>TODO</ThemedText>
+        <FlashList
+          data={DATA}
+          renderItem={({ item }) => <ThemedText>{item.title}</ThemedText>}
+          estimatedItemSize={10}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );

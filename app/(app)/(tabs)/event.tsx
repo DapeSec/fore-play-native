@@ -27,6 +27,12 @@ export default function EventScreen() {
     showMode('date');
   };
 
+  async function fetchAddEvent() {
+    const response = await fetch('/add-event');
+    const data = await response.json();
+    createSubmitConfirmationAlert();
+  }
+
   const createProposalAlert = () =>
     Alert.alert('Submit Proposal', 'Create proposal for selected date?', [
       {
@@ -34,8 +40,8 @@ export default function EventScreen() {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
+      //{text: 'OK', onPress: () => fetchAddEvent()},
       {text: 'OK', onPress: () => createSubmitConfirmationAlert()},
-
     ]);
 
   const createSubmitConfirmationAlert = () =>
@@ -69,7 +75,6 @@ export default function EventScreen() {
           title="Submit"
           onPress={() => {
             createProposalAlert();
-            
           }}
         />
       </ThemedView>
