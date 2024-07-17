@@ -1,11 +1,28 @@
 import { Alert, Button, Image, StyleSheet, Platform } from 'react-native';
 import React, { useState } from 'react';
 
-
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import DateTimePicker from '@react-native-community/datetimepicker';
+
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+
+// Initialize Apollo Client
+const client = new ApolloClient({
+  uri: 'https://fore-play-api-1eac9c288716.herokuapp.com/graphql',
+  cache: new InMemoryCache()
+});
+
+const GET_PROPOSALS = gql`
+  query GetProposals {
+    proposals {
+      id
+      proposalDate
+      userId
+    }
+  }
+`;
 
 export default function EventScreen() {
   const [date, setDate] = useState(new Date());
@@ -50,35 +67,37 @@ export default function EventScreen() {
     ]);
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="subtitle">Propose Tee Time</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.eventContainer}>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            //mode={mode}
-            display="spinner"
-            onChange={onChange}
+    <ApolloProvider client={client}>
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+        headerImage={
+          <Image
+            source={require('@/assets/images/partial-react-logo.png')}
+            style={styles.reactLogo}
           />
-        )}
-        <Button
-          title="Submit"
-          onPress={() => {
-            createProposalAlert();
-          }}
-        />
-      </ThemedView>
-    </ParallaxScrollView>
+        }>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="subtitle">Propose Tee Time</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.eventContainer}>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              //mode={mode}
+              display="spinner"
+              onChange={onChange}
+            />
+          )}
+          <Button
+            title="Submit"
+            onPress={() => {
+              createProposalAlert();
+            }}
+          />
+        </ThemedView>
+      </ParallaxScrollView>
+    </ApolloProvider>
   );
 }
 
