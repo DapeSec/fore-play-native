@@ -7,6 +7,8 @@ import { ThemedView } from '@/components/ThemedView';
 
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
 
+import { format } from 'date-fns';
+
 // Initialize Apollo Client
 const client = new ApolloClient({
   uri: 'https://fore-play-api-1eac9c288716.herokuapp.com/graphql',
@@ -46,7 +48,7 @@ const ResultsList = () => {
 
   const renderItem = ({ item }) => (
     <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-      <ThemedText>{item.proposalDate}</ThemedText>
+      <ThemedText>{deserializeEpochTime(item.proposalDate)}</ThemedText>
       <ThemedView style={{ flexDirection: 'row' }}>
         <Button title="Approve" onPress={() => handleApprove(item.id)} disabled={selectedItems.includes(item.id)} />
         <Button title="Deny" onPress={() => handleDeny(item.id)} disabled={selectedItems.includes(item.id)} style={{ marginLeft: 10 }} />
@@ -66,6 +68,16 @@ const ResultsList = () => {
   );
 };
 
+const deserializeEpochTime = (epochTimeInMs) => {
+  if (!epochTimeInMs || typeof epochTimeInMs !== 'number') {
+    return 'Invalid epoch time';
+  }
+
+  const date = new Date(epochTimeInMs);
+  // Customize the format string as needed (see date-fns documentation)
+  return format(date, 'MM-dd-yyyy');
+};
+
 export default function AvailabilityScreen() {
 
   return (
@@ -80,8 +92,8 @@ export default function AvailabilityScreen() {
         }>
       </ParallaxScrollView>
       <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Confirm Availability</ThemedText>
-        </ThemedView>
+        <ThemedText type="subtitle">Confirm Availability</ThemedText>
+      </ThemedView>
       <ResultsList/>
     </ApolloProvider>
   );
@@ -92,7 +104,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginTop: 8,
   },
   availabilityContainer: {
     gap: 8,
