@@ -1,4 +1,5 @@
-import { Image, StyleSheet, Text, Platform } from 'react-native';
+import { Button, Image, StyleSheet, FlatList, Platform} from 'react-native';
+import React, { useState } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -22,18 +23,48 @@ const GET_PROPOSALS = gql`
   }
 `;
 
-function GetProposals() {
+const ResultsList = () => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
   const { loading, error, data } = useQuery(GET_PROPOSALS);
 
-  if (loading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
+  const handleApprove = (itemId) => {
+    // Implement your approval logic here
+    // This could involve making a mutation to update the data
+    // Ensure proper authorization and security measures are in place
+    console.log('Approved item:', itemId);
+    setSelectedItems((prevItems) => prevItems.filter((item) => item !== itemId));
+  };
+
+  const handleDeny = (itemId) => {
+    // Implement your denial logic here
+    // This could involve making a mutation to update the data
+    // Ensure proper authorization and security measures are in place
+    console.log('Denied item:', itemId);
+    setSelectedItems((prevItems) => prevItems.filter((item) => item !== itemId));
+  };
+
+  const renderItem = ({ item }) => (
+    <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+      <ThemedText>{item.proposalDate}</ThemedText>
+      <ThemedView style={{ flexDirection: 'row' }}>
+        <Button title="Approve" onPress={() => handleApprove(item.id)} disabled={selectedItems.includes(item.id)} />
+        <Button title="Deny" onPress={() => handleDeny(item.id)} disabled={selectedItems.includes(item.id)} style={{ marginLeft: 10 }} />
+      </ThemedView>
+    </ThemedView>
+  );
+
+  if (loading) return <ThemedText>Loading...</ThemedText>;
+  if (error) return <ThemedText>Error: {error.message}</ThemedText>;
 
   return (
-    data.proposals.map((proposal) => (
-      <Text>{proposal.proposalDate}</Text>
-    ))
+    <FlatList
+      data={data.proposals}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
+    />
   );
-}
+};
 
 export default function AvailabilityScreen() {
 
@@ -47,15 +78,11 @@ export default function AvailabilityScreen() {
             style={styles.reactLogo}
           />
         }>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Confirm Your Availability</ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.availabilityContainer}>
-          <Text>
-            <GetProposals />
-          </Text>
-        </ThemedView>
       </ParallaxScrollView>
+      <ThemedView style={styles.titleContainer}>
+          <ThemedText type="subtitle">Confirm Availability</ThemedText>
+        </ThemedView>
+      <ResultsList/>
     </ApolloProvider>
   );
 }
@@ -65,6 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginTop: 8,
   },
   availabilityContainer: {
     gap: 8,
