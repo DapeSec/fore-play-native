@@ -1,37 +1,57 @@
-# Welcome to your Expo app 👋
+# Fore Play: React Native Golf Scheduling App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Description
 
-## Get started
+Fore Play is a mobile app built with React Native and Expo that simplifies scheduling golf dates with your friends. Easily find available tee times and organize your next round on the course.
 
-1. Install dependencies
+## Getting Started
+
+This guide helps you set up a local development environment to run the Fore Play app on your device or simulator.
+
+## Prerequisites
+
+Node.js and npm (or yarn) installed on your machine (https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
+
+1. Clone the Repository
+
+   ```bash
+   git clone https://github.com/DapeSec/fore-play-native.git
+   ```
+
+2. Navigate to the Project Directory
+
+   ```bash
+   cd Fore-Play-Native
+   ```
+
+3. Install dependencies
 
    ```bash
    npm install
    ```
+This command installs all the necessary libraries required for the app to function.
 
-2. Start the app
+4. Install Expo CLI
+
+   ```bash
+   npm install expo
+   ```
+Expo CLI is a command-line tool that helps you develop and deploy React Native apps using Expo.
+
+5. Fix Expo Installation (if needed)
+
+   ```bash
+   npx expo install --fix
+   ```
+This step might be required if there are any issues with the Expo installation.
+
+6. Start the Development Server
 
    ```bash
     npx expo start
    ```
+This command starts the Expo development server, allowing you to preview the app on your device or simulator by following the on-screen instructions.
 
-In the output, you'll find options to open the app in a
+## References
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## After Cloning Repo
-cd Fore-Play-Native
-npm install expo
-npx expo install --fix
-npx expo start
+- [Expo documentation](https://docs.expo.dev/)
