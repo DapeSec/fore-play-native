@@ -7,7 +7,6 @@
       "@/*": [
         "./*"
       ],
-      "react-native-calendars": ["node_modules/@types/react-native-calendars"]
     },
     "noImplicitAny": false
   },
