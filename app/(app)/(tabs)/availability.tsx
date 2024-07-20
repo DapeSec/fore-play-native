@@ -5,6 +5,8 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+import { Colors } from '@/constants/Colors';
+
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
 
 import { format } from 'date-fns';
@@ -91,29 +93,22 @@ export default function AvailabilityScreen() {
           />
         }>
       </ParallaxScrollView>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="subtitle">Confirm Availability</ThemedText>
-      </ThemedView>
       <ResultsList/>
     </ApolloProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
+
   availabilityContainer: {
     gap: 8,
     marginBottom: 8,
   },
   golfBackground: {
-    width: '100%', // Set image width to 100% of the container
-    height: '100%', // Set image height to 100% of the container
-    resizeMode: 'cover', // Scale image to cover the entire container
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
     position: 'absolute',
-    top: 50,
+    backgroundColor: Colors.dark.background,
   },
 });

@@ -6,6 +6,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+import { Colors } from '@/constants/Colors';
+
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, useMutation } from '@apollo/client';
 
 import { getTime } from 'date-fns';
@@ -118,9 +120,6 @@ export default function EventScreen() {
             style={styles.golfBackground}
           />
         }>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Propose Tee Time</ThemedText>
-        </ThemedView>
         <AddProposal/>
       </ParallaxScrollView>
     </ApolloProvider>
@@ -128,21 +127,16 @@ export default function EventScreen() {
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
   eventContainer: {
     alignItems: 'center',
     gap: 8,
     marginBottom: 8,
   },
   golfBackground: {
-    width: '100%', // Set image width to 100% of the container
-    height: '100%', // Set image height to 100% of the container
-    resizeMode: 'cover', // Scale image to cover the entire container
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
     position: 'absolute',
-    top: 50,
+    backgroundColor: Colors.dark.background,
   },
 });

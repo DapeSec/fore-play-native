@@ -3,6 +3,8 @@ import { Button, Image, StyleSheet, Platform } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 
+import { Colors } from '@/constants/Colors';
+
 import { useSession } from '../../../ctx';
 
 export default function SignOutScreen() {
@@ -35,10 +37,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   golfBackground: {
-    width: '100%', // Set image width to 100% of the container
-    height: '100%', // Set image height to 100% of the container
-    resizeMode: 'cover', // Scale image to cover the entire container
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
     position: 'absolute',
-    top: 50,
+    backgroundColor: Colors.dark.background,
   },
 });
