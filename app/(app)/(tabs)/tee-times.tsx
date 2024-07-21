@@ -7,6 +7,8 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 
+import { Colors } from '@/constants/Colors';
+
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
 
 import { format } from 'date-fns';
@@ -59,10 +61,22 @@ const ResultsList = () => {
   if (error) return <ThemedText>Error: {error.message}</ThemedText>;
 
   return (
-    <Calendar
+    <Calendar 
       current={new Date()}
       markedDates={availableDatesMap} // Use the mapped available dates object
       onDayPress={handleDayPress}
+      //style={styles.calendarContainer}
+      theme={{
+        backgroundColor: Colors.dark.background,
+        calendarBackground: Colors.light.background,
+        todayTextColor: Colors.light.text,
+        todayBackgroundColor: Colors.light.secondary,
+        selectedDayTextColor: Colors.light.text,
+        selectedDayBackgroundColor: Colors.light.secondary,
+        dotColor: Colors.light.primary,
+        selectedDotColor: Colors.light.secondary,
+        arrowColor: Colors.light.primary
+      }}
     />
   );
 };
@@ -88,9 +102,11 @@ export default function TeeTimesScreen() {
           <Image
             source={require('@/assets/images/gemini-golf.png')}
             style={styles.golfBackground}
-          />
-        }>
+          />}
+      >
+        <ThemedView style={styles.calendarContainer}>
           <ResultsList/>
+        </ThemedView>
       </ParallaxScrollView>
     </ApolloProvider>
   );
@@ -98,14 +114,13 @@ export default function TeeTimesScreen() {
 
 const styles = StyleSheet.create({
   calendarContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
+    backgroundColor: Colors.light.background,
+  },  
   golfBackground: {
-    width: '100%', // Set image width to 100% of the container
-    height: '100%', // Set image height to 100% of the container
-    resizeMode: 'cover', // Scale image to cover the entire container
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
     position: 'absolute',
-    top: 50,
+    backgroundColor: Colors.dark.background,
   },
 });

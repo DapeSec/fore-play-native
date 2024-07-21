@@ -12,7 +12,8 @@ export default function AppLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        tabBarActiveBackgroundColor: Colors[colorScheme ?? 'light'].secondary,
+        headerShown: true,
       }}>
       <Tabs.Screen
         name="tee-times"
