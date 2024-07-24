@@ -16,6 +16,17 @@ export const GET_PROPOSALS = gql`
     }
   `;
 
+  export const GET_APPROVALS = gql`
+    query GetApprovals {
+      approvals {
+        approval
+        approvalDate
+        id
+        userId
+      }
+    }
+  `;
+
 export const ADD_PROPOSAL = gql`
   mutation Mutation($userId: String!, $proposalDate: Date!) {
     createProposal(userId: $userId, proposalDate: $proposalDate) {

@@ -12,7 +12,6 @@ import { Colors } from '@/constants/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ApolloProvider, useMutation } from '@apollo/client';
 
-
 function AddProposal() {
   const [mutateFunction, { loading, error, data }] = useMutation(ADD_PROPOSAL);
 
@@ -36,6 +35,14 @@ function AddProposal() {
   };
 
   const handleSubmit = async () => {
+    const sevenDaysLater = new Date();
+    sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+
+    if (date < sevenDaysLater) {
+      Alert.alert('Invalid Date', 'Please select a date at least 7 days in the future.');
+      return;
+    }
+
     try {
       const { data } = await mutateFunction({ variables: { userId: "1", proposalDate: serializeDateToEpoch(date) } });
       console.log('Mutation successful:', data);

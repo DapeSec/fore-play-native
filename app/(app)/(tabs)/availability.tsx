@@ -64,8 +64,8 @@ const ResultsList = () => {
     <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <ThemedText>{deserializeEpochTime(item.proposalDate)}</ThemedText>
       <ThemedView style={{ flexDirection: 'row' }}>
-        <Button title="Approve" onPress={() => handleApprove("1", item.proposalDate)} disabled={selectedItems.includes(item.id)} />
-        <Button title="Deny" onPress={() => handleDeny("1", item.proposalDate)} disabled={selectedItems.includes(item.id)} style={{ marginLeft: 10 }} />
+        <Button title="Approve" onPress={() => handleApprove("1", item.proposalDate)} disabled={false} />
+        <Button title="Deny" onPress={() => handleDeny("1", item.proposalDate)} disabled={false} />
       </ThemedView>
     </ThemedView>
   );
