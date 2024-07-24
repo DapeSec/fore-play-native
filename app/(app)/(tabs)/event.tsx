@@ -4,29 +4,14 @@ import React, { useState } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { forePlayClient, ADD_PROPOSAL } from '@/components/ForePlayAPI'
 import { serializeDateToEpoch } from '@/components/SerializeDateTime';
 
 import { Colors } from '@/constants/Colors';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, useMutation } from '@apollo/client';
+import { ApolloProvider, useMutation } from '@apollo/client';
 
-
-// Initialize Apollo Client
-const client = new ApolloClient({
-  uri: 'https://fore-play-api-1eac9c288716.herokuapp.com/graphql',
-  cache: new InMemoryCache()
-});
-
-const ADD_PROPOSAL = gql`
-  mutation Mutation($userId: String!, $proposalDate: Date!) {
-    createProposal(userId: $userId, proposalDate: $proposalDate) {
-      id
-      proposalDate
-      userId
-    }
-  }
-`;
 
 function AddProposal() {
   const [mutateFunction, { loading, error, data }] = useMutation(ADD_PROPOSAL);
@@ -102,7 +87,7 @@ function AddProposal() {
 export default function EventScreen() {
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={forePlayClient}>
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={

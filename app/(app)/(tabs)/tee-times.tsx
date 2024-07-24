@@ -4,29 +4,13 @@ import React, { useState, useEffect } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { deserializeEpochTimeCalendar } from '@/components/SerializeDateTime'
+import { forePlayClient, GET_PROPOSALS } from '@/components/ForePlayAPI';
+import { deserializeEpochTimeCalendar } from '@/components/SerializeDateTime';
 
 import { Colors } from '@/constants/Colors';
 
 import { Calendar, DateObject } from 'react-native-calendars';
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
-
-
-// Initialize Apollo Client
-const client = new ApolloClient({
-  uri: 'https://fore-play-api-1eac9c288716.herokuapp.com/graphql',
-  cache: new InMemoryCache()
-});
-
-const GET_PROPOSALS = gql`
-  query GetProposals {
-    proposals {
-      id
-      proposalDate
-      userId
-    }
-  }
-`;
+import { ApolloProvider, useQuery } from '@apollo/client';
 
 const ResultsList = () => {
   const [selectedDate, setSelectedDate] = useState<DateObject>({});
@@ -81,7 +65,7 @@ const ResultsList = () => {
 export default function TeeTimesScreen() {
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={forePlayClient}>
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={
