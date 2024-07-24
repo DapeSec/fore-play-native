@@ -1,40 +1,21 @@
-import { Image, FlatList, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
-
-import { Calendar, DateObject } from 'react-native-calendars';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { forePlayClient, GET_PROPOSALS } from '@/components/ForePlayAPI';
+import { deserializeEpochTimeCalendar } from '@/components/SerializeDateTime';
 
 import { Colors } from '@/constants/Colors';
 
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
-
-import { format } from 'date-fns';
-
-// Initialize Apollo Client
-const client = new ApolloClient({
-  uri: 'https://fore-play-api-1eac9c288716.herokuapp.com/graphql',
-  cache: new InMemoryCache()
-});
-
-const GET_PROPOSALS = gql`
-  query GetProposals {
-    proposals {
-      id
-      proposalDate
-      userId
-    }
-  }
-`;
+import { Calendar, DateObject } from 'react-native-calendars';
+import { ApolloProvider, useQuery } from '@apollo/client';
 
 const ResultsList = () => {
   const [selectedDate, setSelectedDate] = useState<DateObject>({});
   const { loading, error, data } = useQuery(GET_PROPOSALS);
   const [availableDatesMap, setAvailableDatesMap] = useState({});
-
-  
 
   useEffect(() => {
     if (data) {
@@ -44,7 +25,7 @@ const ResultsList = () => {
 
         // Check if epoch time or formatted string (adjust logic based on API)
         if (typeof proposalDate === 'number') {
-          const formattedDate = deserializeEpochTime(proposalDate);
+          const formattedDate = deserializeEpochTimeCalendar(proposalDate);
           datesMap[formattedDate] = { marked: true }; // Use formatted date
         } else {
           datesMap[proposalDate] = { marked: true }; // Use date string directly
@@ -81,21 +62,10 @@ const ResultsList = () => {
   );
 };
 
-
-const deserializeEpochTime = (epochTimeInMs) => {
-  if (!epochTimeInMs || typeof epochTimeInMs !== 'number') {
-    return 'Invalid epoch time';
-  }
-
-  const date = new Date(epochTimeInMs);
-  // Customize the format string as needed (see date-fns documentation)
-  return format(date, 'yyyy-MM-dd');
-};
-
 export default function TeeTimesScreen() {
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={forePlayClient}>
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={
