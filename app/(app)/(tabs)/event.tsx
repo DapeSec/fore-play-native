@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { serializeDateToEpoch } from '@/components/SerializeDateTime';
 
 import { Colors } from '@/constants/Colors';
 
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, useMutation } from '@apollo/client';
 
-import { getTime } from 'date-fns';
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -48,15 +48,6 @@ function AddProposal() {
 
   const showDatepicker = () => {
     showMode('date');
-  };
-
-  const serializeDateToEpoch = (date) => {
-    if (!date || !(date instanceof Date)) {
-      throw new Error('Invalid date object provided');
-    }
-  
-    const epochTimeInMs = getTime(date);
-    return epochTimeInMs;
   };
 
   const handleSubmit = async () => {

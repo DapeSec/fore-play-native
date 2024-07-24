@@ -4,12 +4,10 @@ import React, { useState } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-
 import { Colors } from '@/constants/Colors';
 
-import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from '@apollo/client';
-
-import { format } from 'date-fns';
+import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery, useMutation } from '@apollo/client';
+import { deserializeEpochTime } from '@/components/SerializeDateTime'
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -27,33 +25,72 @@ const GET_PROPOSALS = gql`
   }
 `;
 
+const CREATE_APPROVAL = gql`
+  mutation Mutation($userId: String!, $approvalDate: Date!, $approval: Boolean!) {
+    createApproval(userId: $userId, approvalDate: $approvalDate, approval: $approval) {
+      approval
+      approvalDate
+      id
+      userId
+    }
+  }
+`;
+
 const ResultsList = () => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   const { loading, error, data } = useQuery(GET_PROPOSALS);
+  const [submitApprove] = useMutation(CREATE_APPROVAL);
+  const [submitDeny] = useMutation(CREATE_APPROVAL);
 
-  const handleApprove = (itemId) => {
-    // Implement your approval logic here
-    // This could involve making a mutation to update the data
-    // Ensure proper authorization and security measures are in place
-    console.log('Approved item:', itemId);
-    setSelectedItems((prevItems) => prevItems.filter((item) => item !== itemId));
+  const handleApprove = async (approverId, golfDate) => {
+
+    try {
+      // Execute the mutation with item data
+      const { data } = await submitApprove({
+        variables: {
+          userId: approverId,
+          approvalDate: golfDate,
+          approval: true,
+        },
+      });
+
+      console.log('Approval successful:', data);
+      // Update selected items state to reflect approval
+      setSelectedItems((prevItems) => prevItems.filter((item) => item !== golfDate));
+    } catch (error) {
+      console.error('Error approving item:', error);
+      // Handle errors appropriately (e.g., display an error message)
+    }
   };
 
-  const handleDeny = (itemId) => {
-    // Implement your denial logic here
-    // This could involve making a mutation to update the data
-    // Ensure proper authorization and security measures are in place
-    console.log('Denied item:', itemId);
-    setSelectedItems((prevItems) => prevItems.filter((item) => item !== itemId));
+  const handleDeny = async (approverId, golfDate) => {
+
+    try {
+      // Execute the mutation with item data
+      const { data } = await submitDeny({
+        variables: {
+          userId: approverId,
+          approvalDate: golfDate,
+          approval: false,
+        },
+      });
+
+      console.log('Deny successful:', data);
+      // Update selected items state to reflect deny
+      setSelectedItems((prevItems) => prevItems.filter((item) => item !== golfDate));
+    } catch (error) {
+      console.error('Error denying item:', error);
+      // Handle errors appropriately (e.g., display an error message)
+    }
   };
 
   const renderItem = ({ item }) => (
     <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <ThemedText>{deserializeEpochTime(item.proposalDate)}</ThemedText>
       <ThemedView style={{ flexDirection: 'row' }}>
-        <Button title="Approve" onPress={() => handleApprove(item.id)} disabled={selectedItems.includes(item.id)} />
-        <Button title="Deny" onPress={() => handleDeny(item.id)} disabled={selectedItems.includes(item.id)} style={{ marginLeft: 10 }} />
+        <Button title="Approve" onPress={() => handleApprove("1", item.proposalDate)} disabled={selectedItems.includes(item.id)} />
+        <Button title="Deny" onPress={() => handleDeny("1", item.proposalDate)} disabled={selectedItems.includes(item.id)} style={{ marginLeft: 10 }} />
       </ThemedView>
     </ThemedView>
   );
@@ -68,16 +105,6 @@ const ResultsList = () => {
       keyExtractor={(item) => item.id.toString()}
     />
   );
-};
-
-const deserializeEpochTime = (epochTimeInMs) => {
-  if (!epochTimeInMs || typeof epochTimeInMs !== 'number') {
-    return 'Invalid epoch time';
-  }
-
-  const date = new Date(epochTimeInMs);
-  // Customize the format string as needed (see date-fns documentation)
-  return format(date, 'MM-dd-yyyy');
 };
 
 export default function AvailabilityScreen() {
