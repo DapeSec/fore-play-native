@@ -73,9 +73,13 @@ const ResultsList = () => {
   if (loading) return <ThemedText>Loading...</ThemedText>;
   if (error) return <ThemedText>Error: {error.message}</ThemedText>;
 
+  const sortedProposals = [...data.proposals].sort((a, b) => {
+    return a.proposalDate - b.proposalDate;
+  });
+
   return (
     <FlatList
-      data={data.proposals}
+      data={sortedProposals}
       renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
     />
