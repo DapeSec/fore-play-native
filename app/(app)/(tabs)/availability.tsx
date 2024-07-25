@@ -1,5 +1,5 @@
-import { Button, Image, StyleSheet, FlatList, Platform} from 'react-native';
-import React, { useState } from 'react';
+import { Button, FlatList, Image, RefreshControl, StyleSheet, Platform} from 'react-native';
+import React, { useRef, useState } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -13,8 +13,9 @@ import { ApolloProvider, useQuery, useMutation } from '@apollo/client';
 
 const ResultsList = () => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const { loading, error, data } = useQuery(GET_PROPOSALS);
+  const { loading, error, data, refetch } = useQuery(GET_PROPOSALS);
   const [submitApprove] = useMutation(CREATE_APPROVAL);
   const [submitDeny] = useMutation(CREATE_APPROVAL);
 
@@ -70,6 +71,19 @@ const ResultsList = () => {
     </ThemedView>
   );
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch(); // Call refetch on pull down
+      console.log('Data refreshed successfully!');
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately (e.g., display an error message)
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   if (loading) return <ThemedText>Loading...</ThemedText>;
   if (error) return <ThemedText>Error: {error.message}</ThemedText>;
 
@@ -82,6 +96,9 @@ const ResultsList = () => {
       data={sortedProposals}
       renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
     />
   );
 };
