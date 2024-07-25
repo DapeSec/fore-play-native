@@ -2,7 +2,6 @@ import { Alert, Button, Image, StyleSheet, Platform } from 'react-native';
 import React, { useState } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { forePlayClient, ADD_PROPOSAL } from '@/components/ForePlayAPI'
 import { serializeDateToEpoch } from '@/components/SerializeDateTime';
@@ -17,22 +16,33 @@ function AddProposal() {
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
+  const [showAddDateButton, setShowAddDateButton] = useState(true);
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [showSelectedDate, setShowSelectedDate] = useState(false);
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    //setShow(false);
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios'); // Only show on iOS after picking a date
     setDate(currentDate);
+    setShowSubmitButton(true); // Show submit button after selecting a date
+    setShowSelectedDate(true); // Show selected date on Android
   };
 
   const showMode = (currentMode) => {
-    //setShow(true);
+    setShow(true);
     setMode(currentMode);
   };
 
   const showDatepicker = () => {
     showMode('date');
+    setShowAddDateButton(false); // Hide the button after first click
   };
+
+  const handleDatePress = () => {
+    setShow(true); // Show date picker on Android when selected date is pressed
+  };
+
 
   const handleSubmit = async () => {
     const sevenDaysLater = new Date();
@@ -69,27 +79,42 @@ function AddProposal() {
       {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
 
-  return (
-    <ThemedView style={styles.eventContainer}>
-    {show && (
-      <DateTimePicker
-        testID="dateTimePicker"
-        value={date}
-        //mode={mode}
-        display="spinner"
-        onChange={onChange}
-      />
-    )}
-    <Button
-      title="Submit"
-      onPress={() => {
-        createProposalAlert();
-      }}
-    />
-  </ThemedView>
-
+    return (
+      <ThemedView style={styles.eventContainer}>
+        {showAddDateButton && (
+          <Button
+            title="Add Date"
+            onPress={showDatepicker}
+          />
+        )}
+        {show ? (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            //mode={mode}
+            is24Hour={true} // Or false if you want 12-hour format
+            display="default"
+            onChange={onChange}
+          />
+        ) : showSelectedDate ? (
+          <Button
+            title={date.toLocaleDateString()}
+            onPress={handleDatePress}
+          />
+        ) : null}
+        {showSubmitButton && (
+          <Button
+            title="Submit"
+            onPress={() => {
+              createProposalAlert();
+            }}
+          />
+        )}
+      </ThemedView>
     );
-}
+  }
+  
+  
 
 export default function EventScreen() {
 
