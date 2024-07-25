@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, RefreshControl, StyleSheet, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -14,7 +14,8 @@ import { ApolloProvider, useQuery } from '@apollo/client';
 
 const ResultsList = () => {
   const [selectedDate, setSelectedDate] = useState<DateObject>({});
-  const { loading, error , data } = useQuery(GET_APPROVALS);
+  const [refreshing, setRefreshing] = useState(false);
+  const { loading, error , data, refetch } = useQuery(GET_APPROVALS);
   const [availableDatesMap, setAvailableDatesMap] = useState({});
 
   useEffect(() => {
@@ -43,6 +44,19 @@ const ResultsList = () => {
    // Calendar
    //const handleDayPress = (day) => setSelectedDate({ [day.dateString]: { selected: true } });
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch(); // Call refetch on pull down
+      console.log('Data refreshed successfully!');
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle errors appropriately (e.g., display an error message)
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   if (loading) return <ThemedText>Loading...</ThemedText>;
   if (error) return <ThemedText>Error: {error.message}</ThemedText>;
 
@@ -50,7 +64,8 @@ const ResultsList = () => {
     <Calendar 
       current={new Date()}
       markedDates={availableDatesMap} // Use the mapped available dates object
-      //onDayPress={handleDayPress}
+      onDayPress={handleRefresh}
+      onMonthChange={handleRefresh}
       //style={styles.calendarContainer}
       theme={{
         backgroundColor: Colors.dark.background,
@@ -78,16 +93,19 @@ export default function TeeTimesScreen() {
             style={styles.golfBackground}
           />}
       >
-        <ThemedView style={styles.calendarContainer}>
-          <ResultsList/>
-        </ThemedView>
       </ParallaxScrollView>
+      <ThemedView style={styles.calendarContainer}>
+          <ResultsList/>
+      </ThemedView>
     </ApolloProvider>
   );
 }
 
 const styles = StyleSheet.create({
   calendarContainer: {
+    width: '100%',
+    height: '100%',
+    flex: 2,
     backgroundColor: Colors.light.background,
   },  
   golfBackground: {
