@@ -2,9 +2,9 @@ import { Image, StyleSheet, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { forePlayClient, GET_PROPOSALS } from '@/components/ForePlayAPI';
+import { ThemedView } from '@/components/ThemedView';
+import { forePlayClient, GET_APPROVALS } from '@/components/ForePlayAPI';
 import { deserializeEpochTimeCalendar } from '@/components/SerializeDateTime';
 
 import { Colors } from '@/constants/Colors';
@@ -14,29 +14,34 @@ import { ApolloProvider, useQuery } from '@apollo/client';
 
 const ResultsList = () => {
   const [selectedDate, setSelectedDate] = useState<DateObject>({});
-  const { loading, error, data } = useQuery(GET_PROPOSALS);
+  const { loading, error , data } = useQuery(GET_APPROVALS);
   const [availableDatesMap, setAvailableDatesMap] = useState({});
 
   useEffect(() => {
     if (data) {
       const datesMap = {};
-      data.proposals.forEach((proposal) => {
-        const proposalDate = proposal.proposalDate; // Access date property
+      data.approvals.forEach((approval) => {
+        const approvalDate = approval.approvalDate; // Access date property
 
         // Check if epoch time or formatted string (adjust logic based on API)
-        if (typeof proposalDate === 'number') {
-          const formattedDate = deserializeEpochTimeCalendar(proposalDate);
-          datesMap[formattedDate] = { marked: true }; // Use formatted date
-        } else {
-          datesMap[proposalDate] = { marked: true }; // Use date string directly
-        }
+        const formattedDate = typeof approvalDate === 'number'
+          ? deserializeEpochTimeCalendar(approvalDate)
+          : approvalDate;
+
+        datesMap[formattedDate] = (datesMap[formattedDate] || 0) + 1;
       });
-      setAvailableDatesMap(datesMap);
+
+      // Filter dates with 4 or more approvals
+      const filteredDatesMap = Object.keys(datesMap)
+        .filter(date => datesMap[date] >= 4)
+        .reduce((acc, date) => ({ ...acc, [date]: { selected: true } }), {});
+
+      setAvailableDatesMap(filteredDatesMap);
     }
   }, [data]);
 
    // Calendar
-   const handleDayPress = (day) => setSelectedDate({ [day.dateString]: { selected: true } });
+   //const handleDayPress = (day) => setSelectedDate({ [day.dateString]: { selected: true } });
 
   if (loading) return <ThemedText>Loading...</ThemedText>;
   if (error) return <ThemedText>Error: {error.message}</ThemedText>;
@@ -45,7 +50,7 @@ const ResultsList = () => {
     <Calendar 
       current={new Date()}
       markedDates={availableDatesMap} // Use the mapped available dates object
-      onDayPress={handleDayPress}
+      //onDayPress={handleDayPress}
       //style={styles.calendarContainer}
       theme={{
         backgroundColor: Colors.dark.background,
@@ -53,14 +58,13 @@ const ResultsList = () => {
         todayTextColor: Colors.light.text,
         todayBackgroundColor: Colors.light.secondary,
         selectedDayTextColor: Colors.light.text,
-        selectedDayBackgroundColor: Colors.light.secondary,
-        dotColor: Colors.light.primary,
-        selectedDotColor: Colors.light.secondary,
-        arrowColor: Colors.light.primary
+        selectedDayBackgroundColor: Colors.light.tint,
+        arrowColor: Colors.light.primary,
       }}
     />
   );
 };
+
 
 export default function TeeTimesScreen() {
 
