@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { forePlayClient, GET_APPROVALS } from '@/components/ForePlayAPI';
+import { forePlayClient, GET_APPROVED } from '@/components/ForePlayAPI';
 import { deserializeEpochTimeCalendar } from '@/components/SerializeDateTime';
 
 import { Colors } from '@/constants/Colors';
@@ -15,14 +15,14 @@ import { ApolloProvider, useQuery } from '@apollo/client';
 const ResultsList = () => {
   const [selectedDate, setSelectedDate] = useState<DateObject>({});
   const [refreshing, setRefreshing] = useState(false);
-  const { loading, error , data, refetch } = useQuery(GET_APPROVALS);
+  const { loading, error , data, refetch } = useQuery(GET_APPROVED);
   const [availableDatesMap, setAvailableDatesMap] = useState({});
 
   useEffect(() => {
     if (data) {
       const datesMap = {};
-      data.approvals.forEach((approval) => {
-        const approvalDate = approval.approvalDate; // Access date property
+      data.approvalsApproved.forEach((approvalsApproved) => {
+        const approvalDate = approvalsApproved.approvalDate; // Access date property
 
         // Check if epoch time or formatted string (adjust logic based on API)
         const formattedDate = typeof approvalDate === 'number'
