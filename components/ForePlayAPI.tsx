@@ -16,9 +16,9 @@ export const GET_PROPOSALS = gql`
     }
   `;
 
-  export const GET_APPROVALS = gql`
-    query GetApprovals {
-      approvals {
+  export const GET_APPROVED = gql`
+    query GetApproved {
+      approvalsApproved {
         approval
         approvalDate
         id
