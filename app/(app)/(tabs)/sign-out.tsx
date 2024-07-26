@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 
 import { Colors } from '@/constants/Colors';
 
-import { useSession } from '../../../ctx';
+import { useSession } from '../../../components/OktaLogin';
 
 export default function SignOutScreen() {
   const { signOut } = useSession();
