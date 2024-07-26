@@ -5,7 +5,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { forePlayClient, GET_PROPOSALS, CREATE_APPROVAL} from '@/components/ForePlayAPI'
-import { deserializeEpochTime } from '@/components/SerializeDateTime'
+import { deserializeEpochTime, deserializeEpochTimeCalendar } from '@/components/SerializeDateTime'
 
 import { Colors } from '@/constants/Colors';
 
@@ -87,7 +87,15 @@ const ResultsList = () => {
   if (loading) return <ThemedText>Loading...</ThemedText>;
   if (error) return <ThemedText>Error: {error.message}</ThemedText>;
 
-  const sortedProposals = [...data.proposals].sort((a, b) => {
+  const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
+
+   // Filter proposals first
+   const filteredProposals = data.proposals.filter(
+    (proposal) => deserializeEpochTimeCalendar(proposal.proposalDate) >= today
+  );
+
+  // Then sort the filtered proposals
+  const sortedProposals = filteredProposals.sort((a, b) => {
     return a.proposalDate - b.proposalDate;
   });
 
