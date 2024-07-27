@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.anonymous.fore-play</string>
+          <string>com.andradedata.foreplay</string>
         </array>
       </dict>
     </array>

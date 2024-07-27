@@ -1,4 +1,4 @@
-package com.jaandrade25.foreplay
+package com.andradedata.foreplay
 
 import android.app.Application
 import android.content.res.Configuration

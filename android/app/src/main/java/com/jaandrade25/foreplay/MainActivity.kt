@@ -1,4 +1,4 @@
-package com.jaandrade25.foreplay
+package com.andradedata.foreplay
 
 import android.os.Build
 import android.os.Bundle

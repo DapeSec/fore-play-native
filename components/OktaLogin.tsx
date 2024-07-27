@@ -50,7 +50,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
       scopes: ['openid'],
       responseType: 'id_token',
       redirectUri: makeRedirectUri({
-        native: 'com.okta.dev-21624059:/callback',
+        native: 'com.andradedata.foreplay:/callback',
       }),
       extraParams: {
         nonce: generateNonce(), // Function to generate a unique nonce
