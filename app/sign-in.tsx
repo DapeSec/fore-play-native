@@ -1,5 +1,3 @@
-import { router } from 'expo-router';
-
 import { Button, Image, StyleSheet, Text, View, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
@@ -8,7 +6,7 @@ import { ThemedView } from '@/components/ThemedView'
 
 import { Colors } from '@/constants/Colors';
 
-import { useSession } from '../ctx';
+import { useSession } from '../components/OktaLogin';
 
 
 export default function HomeScreen() {
@@ -27,10 +25,7 @@ export default function HomeScreen() {
         <Button
           title="Sign In"
           onPress={() => {
-            signIn();
-              // Navigate after signing in. You may want to tweak this to ensure sign-in is
-              // successful before navigating.
-              router.replace('/tee-times');   
+            signIn();   
         }}/>
       </ThemedView>
     </ParallaxScrollView>

@@ -11,6 +11,9 @@ import { Colors } from '@/constants/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ApolloProvider, useMutation } from '@apollo/client';
 
+import { useSession } from '@/components/OktaLogin';
+import { jwtDecode } from "jwt-decode";
+
 function AddProposal() {
   const [mutateFunction, { loading, error, data }] = useMutation(ADD_PROPOSAL);
 
@@ -20,6 +23,20 @@ function AddProposal() {
   const [showAddDateButton, setShowAddDateButton] = useState(true);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [showSelectedDate, setShowSelectedDate] = useState(false);
+
+  const { session } = useSession();
+  const userID = extractUsernameFromIdToken(session);
+
+  function extractUsernameFromIdToken(idToken) {
+    try {
+      const decodedToken = jwtDecode(idToken);
+      const userID = decodedToken.sub;
+      return userID;
+    } catch (error) {
+      console.error('Error extracting username from ID token:', error);
+      return null; // Or handle the error appropriately
+    }
+  }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -54,7 +71,7 @@ function AddProposal() {
     }
 
     try {
-      const { data } = await mutateFunction({ variables: { userId: "1", proposalDate: serializeDateToEpoch(date) } });
+      const { data } = await mutateFunction({ variables: { userId: userID, proposalDate: serializeDateToEpoch(date) } });
       console.log('Mutation successful:', data);
       createSubmitConfirmationAlert();
       // Handle successful mutation, e.g., clear form, show success message

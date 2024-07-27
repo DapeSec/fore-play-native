@@ -11,6 +11,9 @@ import { Colors } from '@/constants/Colors';
 
 import { ApolloProvider, useQuery, useMutation } from '@apollo/client';
 
+import { useSession } from '@/components/OktaLogin';
+import { jwtDecode } from "jwt-decode";
+
 const ResultsList = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -18,6 +21,20 @@ const ResultsList = () => {
   const { loading, error, data, refetch } = useQuery(GET_PROPOSALS);
   const [submitApprove] = useMutation(CREATE_APPROVAL);
   const [submitDeny] = useMutation(CREATE_APPROVAL);
+
+  const { session } = useSession();
+  const userID = extractUsernameFromIdToken(session);
+
+  function extractUsernameFromIdToken(idToken) {
+    try {
+      const decodedToken = jwtDecode(idToken);
+      const userID = decodedToken.sub;
+      return userID;
+    } catch (error) {
+      console.error('Error extracting username from ID token:', error);
+      return null; // Or handle the error appropriately
+    }
+  }
 
   const handleApprove = async (approverId, golfDate) => {
 
@@ -65,8 +82,8 @@ const ResultsList = () => {
     <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <ThemedText>{deserializeEpochTime(item.proposalDate)}</ThemedText>
       <ThemedView style={{ flexDirection: 'row' }}>
-        <Button title="Approve" onPress={() => handleApprove("1", item.proposalDate)} disabled={false} />
-        <Button title="Deny" onPress={() => handleDeny("1", item.proposalDate)} disabled={false} />
+        <Button title="Approve" onPress={() => handleApprove(userID, item.proposalDate)} disabled={false} />
+        <Button title="Deny" onPress={() => handleDeny(userID, item.proposalDate)} disabled={false} />
       </ThemedView>
     </ThemedView>
   );

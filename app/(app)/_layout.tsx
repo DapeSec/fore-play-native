@@ -2,7 +2,7 @@ import { Redirect, Stack, Tabs } from 'expo-router';
 
 import React from 'react';
 
-import { useSession } from '../../ctx';
+import { useSession } from '../../components/OktaLogin';
 
 export default function AppLayout() {
   const { session, isLoading } = useSession();

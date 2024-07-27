@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "fore-play",
+    "name": "Fore Play",
     "slug": "fore-play",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.fore-play"
+      "bundleIdentifier": "com.andradedata.foreplay"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jaandrade25.foreplay"
+      "package": "com.andradedata.foreplay"
     },
     "web": {
       "bundler": "metro",

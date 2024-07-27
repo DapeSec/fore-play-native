@@ -83,9 +83,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.jaandrade25.foreplay'
+    namespace 'com.andradedata.foreplay'
     defaultConfig {
-        applicationId 'com.jaandrade25.foreplay'
+        applicationId 'com.andradedata.foreplay'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

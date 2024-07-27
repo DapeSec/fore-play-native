@@ -1,9 +1,10 @@
-import React from 'react';
-import { useStorageState } from './useStorageState';
+import React, { useEffect } from 'react';
 
+import { useStorageState } from '../hooks/useStorageState';
+
+import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest, useAutoDiscovery } from 'expo-auth-session';
-
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -18,6 +19,12 @@ const AuthContext = React.createContext<{
   session: null,
   isLoading: false,
 });
+
+export function generateNonce() {
+  const randomBytes = new Uint8Array(32);
+  const nonce = randomBytes.toString();
+  return nonce;
+}
 
 // This hook can be used to access the user info.
 export function useSession() {
@@ -40,17 +47,29 @@ export function SessionProvider(props: React.PropsWithChildren) {
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: '0oai9j6z6wJowU9QQ5d7',
-      scopes: ['openid', 'profile'],
+      scopes: ['openid'],
+      responseType: 'id_token',
       redirectUri: makeRedirectUri({
-        native: 'http://localhost:8081/',
+        native: 'com.andradedata.foreplay:/callback',
       }),
+      extraParams: {
+        nonce: generateNonce(), // Function to generate a unique nonce
+      },
     },
     discovery
   );
   
   React.useEffect(() => {
     if (response?.type === 'success') {
-      const { code } = response.params;
+      // Check if id_token exists before accessing it
+      if (response.params?.id_token) {
+        const { id_token } = response.params;
+        setSession(id_token);
+        router.replace('/tee-times');
+      } else {
+        console.error('id_token is missing from response');
+        // Handle the case where id_token is not present
+      }
     }
   }, [response]);
 
@@ -60,7 +79,6 @@ export function SessionProvider(props: React.PropsWithChildren) {
         signIn: () => {
           // Perform sign-in logic here
           promptAsync();
-          setSession('xxx');
         },
         signOut: () => {
           setSession(null);

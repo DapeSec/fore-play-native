@@ -25,7 +25,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.jaandrade25.foreplay"/>
+        <data android:scheme="com.andradedata.foreplay"/>
         <data android:scheme="exp+fore-play"/>
       </intent-filter>
     </activity>
