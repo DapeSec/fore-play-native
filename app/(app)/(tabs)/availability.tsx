@@ -1,4 +1,4 @@
-import { Button, FlatList, Image, RefreshControl, StyleSheet, Platform} from 'react-native';
+import { Alert, Button, FlatList, Image, RefreshControl, StyleSheet, Platform} from 'react-native';
 import React, { useRef, useState } from 'react';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -36,7 +36,32 @@ const ResultsList = () => {
     }
   }
 
+  const createApproveAlert = (approverId, golfDate) =>
+    Alert.alert('Approve Availability', 'Approve availability for selected date?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => handleApprove(approverId, golfDate)},
+    ]);
+
+  const createDenyAlert = (approverId, golfDate) =>
+    Alert.alert('Deny Availability', 'Deny availability for selected date?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => handleDeny(approverId, golfDate)},
+    ]);
+
   const handleApprove = async (approverId, golfDate) => {
+
+    const createApprovalConfirmationAlert = () =>
+      Alert.alert('Approval Submitted', 'Approval succesfully submitted.', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
 
     try {
       // Execute the mutation with item data
@@ -49,6 +74,7 @@ const ResultsList = () => {
       });
 
       console.log('Approval successful:', data);
+      createApprovalConfirmationAlert();
       // Update selected items state to reflect approval
       setSelectedItems((prevItems) => prevItems.filter((item) => item !== golfDate));
     } catch (error) {
@@ -58,6 +84,11 @@ const ResultsList = () => {
   };
 
   const handleDeny = async (approverId, golfDate) => {
+
+    const createDenyConfirmationAlert = () =>
+      Alert.alert('Deny Submitted', 'Deny succesfully submitted.', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
 
     try {
       // Execute the mutation with item data
@@ -70,6 +101,7 @@ const ResultsList = () => {
       });
 
       console.log('Deny successful:', data);
+      createDenyConfirmationAlert();
       // Update selected items state to reflect deny
       setSelectedItems((prevItems) => prevItems.filter((item) => item !== golfDate));
     } catch (error) {
@@ -82,8 +114,8 @@ const ResultsList = () => {
     <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
       <ThemedText>{deserializeEpochTime(item.proposalDate)}</ThemedText>
       <ThemedView style={{ flexDirection: 'row' }}>
-        <Button title="Approve" onPress={() => handleApprove(userID, item.proposalDate)} disabled={false} />
-        <Button title="Deny" onPress={() => handleDeny(userID, item.proposalDate)} disabled={false} />
+        <Button title="Approve" onPress={() => createApproveAlert(userID, item.proposalDate)} disabled={false} />
+        <Button title="Deny" onPress={() => createDenyAlert(userID, item.proposalDate)} disabled={false} />
       </ThemedView>
     </ThemedView>
   );
